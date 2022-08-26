@@ -1,25 +1,57 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+import { Component } from 'react';
 
-function App() {
+
+
+
+class App extends Component{
+
+  constructor(){
+    super();
+    this.state = {
+      countries : [],
+      searchCountry : ' ',
+    }
+  }
+
+  componentDidMount(){
+    fetch('https://restcountries.com/v2/all')
+    .then((data) => data.json())
+    .then((data1) =>{
+      this.setState(() => { return {countries : data1} },
+       () => {console.log(data1)})
+    })
+  }
+
+  render(){
+
+
+    const filterName = this.state.countries.filter((elememt) => {
+      { return elememt.name.toLocaleLowerCase().includes(this.state.searchCountry)}
+    })
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input className = 'search-box'
+      type = 'search'
+      placeholder = 'search any country'
+      onChange={(event) => {
+        console.log(event.target.value)
+
+        const searchCountry = event.target.value.toLocaleLowerCase();
+        this.setState(()=>{
+          return {searchCountry}
+        })
+      }}
+      />
+
+      {filterName.map((element) => {
+        return <div key = {element.id}><h1>{element.name} <img src={element.flags.png} alt="Girl in a jacket" width="50" height="60"></img></h1></div>
+      })}
     </div>
   );
+}
 }
 
 export default App;
