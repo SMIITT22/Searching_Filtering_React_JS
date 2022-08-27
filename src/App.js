@@ -24,11 +24,23 @@ class App extends Component{
     })
   }
 
+
+
+
+  onsearchChange = (event) => {
+    console.log(event.target.value)
+    const searchCountry = event.target.value.toLocaleLowerCase();
+    this.setState(()=>{
+      return {searchCountry}
+    })
+  }
+
+
   render(){
 
 
     const filterName = this.state.countries.filter((elememt) => {
-      { return elememt.name.toLocaleLowerCase().includes(this.state.searchCountry)}
+       return elememt.name.toLocaleLowerCase().includes(this.state.searchCountry)
     })
 
   return (
@@ -36,18 +48,11 @@ class App extends Component{
       <input className = 'search-box'
       type = 'search'
       placeholder = 'search any country'
-      onChange={(event) => {
-        console.log(event.target.value)
-
-        const searchCountry = event.target.value.toLocaleLowerCase();
-        this.setState(()=>{
-          return {searchCountry}
-        })
-      }}
+      onChange={this.onsearchChange}
       />
 
       {filterName.map((element) => {
-        return <div key = {element.id}><h1>{element.name} <img src={element.flags.png} alt="Girl in a jacket" width="50" height="60"></img></h1></div>
+        return <div key = {element.id}><h1>{element.name} <img src={element.flags.png} alt="Girl in a jacket" width="100" height="60"></img></h1></div>
       })}
     </div>
   );
